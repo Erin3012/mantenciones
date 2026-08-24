@@ -1,0 +1,6 @@
+# Protege el archivo de credenciales y otros archivos de configuración.
+<FilesMatch "^\.env($|\.)|^(schema\.sql|README\.md)$">
+  Require all denied
+</FilesMatch>
+
+Options -Indexes

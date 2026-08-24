@@ -1,0 +1,6 @@
+<?php
+require_once __DIR__ . '/auth.php';
+$user = require_login();
+?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Panel</title><style>
+body{margin:0;background:#f3f6f8;color:#183044;font:16px system-ui,sans-serif}.wrap{max-width:800px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:15px;margin-top:25px}.card{background:white;padding:22px;border-radius:14px;box-shadow:0 3px 15px #18304412;text-decoration:none;color:inherit}.card h2{margin-top:0;color:#136f8a}a{color:#136f8a}
+</style></head><body><main class="wrap"><div class="top"><div><h1>Panel de mantenciones</h1><p>Hola, <?=e($user['nombre'])?> (<?=e($user['rol'])?>)</p></div><a href="logout.php">Cerrar sesión</a></div><section class="cards"><a class="card" href="index.php"><h2>Registrar mantención</h2><p>Ingresar un trabajo realizado y adjuntar una foto.</p></a><a class="card" href="escanear.php"><h2>Escanear carro</h2><p>Consultar el historial usando la cámara.</p></a><?php if($user['rol']==='supervisor'):?><a class="card" href="generar_qr.php"><h2>Generar códigos QR</h2><p>Descargar o imprimir los QR de los carros.</p></a><?php endif;?></section></main></body></html>
