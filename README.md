@@ -9,7 +9,7 @@ Aplicación PHP 8+ / MySQL compatible con hosting cPanel.
 4. Abre phpMyAdmin, selecciona la base de datos y importa `schema.sql`.
 5. Sube todos los archivos a `public_html` por FTP o el Administrador de archivos, incluyendo `.env` y `.htaccess`.
 6. Confirma que exista la carpeta `uploads` y que PHP pueda escribir en ella. Normalmente `0755` es suficiente; usa `0775` solo si tu proveedor lo exige.
-7. Accede con `supervisor@example.com` y contraseña `password`, genera una nueva contraseña segura y elimina los datos de ejemplo de `schema.sql` si corresponde.
+7. Accede con `supervisor@example.com` y contraseña temporal `CambiarAhora!2026`; cambia esta contraseña antes de usar el sistema en producción y elimina los datos de ejemplo de `schema.sql` si corresponde.
 
 ## Uso
 

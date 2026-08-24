@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS mantenciones (
   INDEX idx_mant_carro_fecha (carro_id, realizada_en)
 ) ENGINE=InnoDB;
 
--- Usuario inicial: supervisor@example.com / password
+-- Usuario inicial: supervisor@example.com / CambiarAhora!2026
 -- Debes cambiar esta contraseña después del primer acceso.
 INSERT INTO usuarios (nombre, correo, password_hash, rol)
-VALUES ('Supervisor inicial', 'supervisor@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.YeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'supervisor')
+VALUES ('Supervisor inicial', 'supervisor@example.com', '$2y$10$7O9gTjbqRMK2PdZgkEDbuOAzntktEJBn5ugJUPhdiZsBCcw7tkWCW', 'supervisor')
 ON DUPLICATE KEY UPDATE correo = correo;
 
 INSERT INTO carros (codigo, descripcion, ubicacion) VALUES
