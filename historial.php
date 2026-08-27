@@ -32,7 +32,7 @@ if ($codigoSeleccionado !== '') {
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Historial de mantenciones</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#eef3f7;color:#183044;font:16px system-ui,sans-serif}.wrap{max-width:900px;margin:auto;padding:20px}.box,.item{background:white;padding:24px;border-radius:16px;box-shadow:0 3px 15px #18304412;margin-top:18px}label{display:block;margin:0 0 6px;font-weight:700}select,button{width:100%;padding:13px;border:1px solid #c8d4de;border-radius:9px;font:inherit}button{margin-top:15px;background:#136f8a;color:white;border:0;font-weight:700}a{color:#136f8a}.error{padding:10px;background:#ffe4e4;color:#9b1c1c;border-radius:8px;margin-top:15px}.empty{padding:18px;background:#f5f8fa;border-radius:10px;margin-top:18px}.item h3{margin:0 0 8px}.meta{color:#607587;font-size:14px;margin-bottom:12px}.foto{max-width:100%;max-height:320px;border-radius:10px;margin-top:12px}.back{display:inline-block;margin-bottom:2px}.header{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.header h1{margin:0}.badge{display:inline-block;padding:5px 10px;border-radius:20px;background:#e3f1f5;color:#136f8a;font-weight:700;font-size:13px}.actions{display:flex;gap:8px;align-items:center;margin-top:14px}.edit{display:inline-block;padding:8px 12px;border-radius:8px;background:#eef6f8;color:#136f8a;text-decoration:none;font-weight:700}.edit:hover{background:#dceef2}
+*{box-sizing:border-box}body{margin:0;background:#eef3f7;color:#183044;font:16px system-ui,sans-serif}.wrap{max-width:900px;margin:auto;padding:20px}.box,.item{background:white;padding:24px;border-radius:16px;box-shadow:0 3px 15px #18304412;margin-top:18px}label{display:block;margin:0 0 6px;font-weight:700}select,button{width:100%;padding:13px;border:1px solid #c8d4de;border-radius:9px;font:inherit}button{margin-top:15px;background:#136f8a;color:white;border:0;font-weight:700}a{color:#136f8a}.error{padding:10px;background:#ffe4e4;color:#9b1c1c;border-radius:8px;margin-top:15px}.empty{padding:18px;background:#f5f8fa;border-radius:10px;margin-top:18px}.item h3{margin:0 0 8px}.meta{color:#607587;font-size:14px;margin-bottom:12px}.foto{max-width:100%;max-height:320px;border-radius:10px;margin-top:12px}.back{display:inline-block;margin-bottom:2px}.header{display:flex;justify-content:space-between;gap:15px;align-items:center;flex-wrap:wrap}.header h1{margin:0}.badge{display:inline-block;padding:5px 10px;border-radius:20px;background:#e3f1f5;color:#136f8a;font-weight:700;font-size:13px}.actions{display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap}.edit,.delete{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:700;border:0;font:inherit;cursor:pointer}.edit{background:#eef6f8;color:#136f8a}.edit:hover{background:#dceef2}.delete{background:#fff0f0;color:#a32121}.delete:hover{background:#ffe0e0}
 </style>
 </head>
 <body><main class="wrap">
@@ -65,7 +65,16 @@ if ($codigoSeleccionado !== '') {
 <div class="meta"><?=e(date('d/m/Y H:i', strtotime($registro['realizada_en'])))?> · Registrada por <?=e($registro['trabajador'])?></div>
 <div><?=nl2br(e($registro['trabajo']))?></div>
 <?php if($registro['foto']): ?><img class="foto" src="uploads/<?=e($registro['foto'])?>" alt="Foto de la mantención" loading="lazy"><?php endif; ?>
-<?php if (($user['rol'] ?? '') === 'supervisor'): ?><div class="actions"><a class="edit" href="editar_mantencion.php?id=<?=e((string)$registro['id'])?>">✏️ Editar mantención</a></div><?php endif; ?>
+<?php if (($user['rol'] ?? '') === 'supervisor'): ?>
+<div class="actions">
+<a class="edit" href="editar_mantencion.php?id=<?=e((string)$registro['id'])?>">✏️ Editar</a>
+<form method="post" action="eliminar_mantencion.php" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta mantención? Esta acción no se puede deshacer.');" style="margin:0">
+<input type="hidden" name="csrf_token" value="<?=e(csrf_token())?>">
+<input type="hidden" name="id" value="<?=e((string)$registro['id'])?>">
+<button type="submit" class="delete">🗑️ Eliminar</button>
+</form>
+</div>
+<?php endif; ?>
 </article>
 <?php endforeach; ?>
 <?php endif; ?>
