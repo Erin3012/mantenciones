@@ -4,7 +4,23 @@ require_role('supervisor');
 $carros = db()->query('SELECT codigo, descripcion FROM carros WHERE activo=1 ORDER BY codigo')->fetchAll();
 $codigo = trim((string)($_GET['carro'] ?? ''));
 $valid = false; foreach($carros as $c){if($c['codigo']===$codigo){$valid=true;break;}}
-$target = $valid ? app_url('ver.php?carro=' . rawurlencode($codigo)) : '';
+$target = $valid ? app_url('historial.php?carro=' . rawurlencode($codigo)) : '';
 ?><!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Generar QR</title><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><style>
 body{margin:0;background:#eef3f7;color:#183044;font:16px system-ui,sans-serif}.wrap{max-width:620px;margin:auto;padding:20px}.box{background:#fff;padding:24px;border-radius:16px;box-shadow:0 3px 15px #18304412}select,button{width:100%;padding:12px;border:1px solid #c8d4de;border-radius:8px;font:inherit}button{margin-top:12px;background:#136f8a;color:#fff;border:0;font-weight:700}.qr{display:flex;justify-content:center;margin:25px 0}.url{word-break:break-all;color:#5c7180}@media print{.no-print{display:none}.box{box-shadow:none}}
-</style></head><body><main class="wrap"><a class="no-print" href="panel.php">← Volver al panel</a><section class="box"><h1>Generar código QR</h1><form class="no-print"><label for="carro">Carro</label><select id="carro" name="carro" onchange="this.form.submit()"><option value="">Selecciona un carro</option><?php foreach($carros as $c):?><option value="<?=e($c['codigo'])?>" <?=$codigo===$c['codigo']?'selected':''?>><?=e($c['codigo'])?><?= $c['descripcion'] ? ' — '.e($c['descripcion']) : ''?></option><?php endforeach;?></select></form><?php if($target):?><div id="qrcode" class="qr"></div><p class="url"><?=e($target)?></p><div class="no-print"><button type="button" id="download">Descargar PNG</button><button type="button" onclick="window.print()">Imprimir</button></div><script>new QRCode(document.getElementById('qrcode'),{text:<?=json_encode($target,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT)?>,width:280,height:280,colorDark:'#183044',colorLight:'#ffffff'});document.getElementById('download').onclick=()=>{const img=document.querySelector('#qrcode img');if(!img)return;const a=document.createElement('a');a.href=img.src;a.download='qr-<?=e($codigo)?>.png';a.click();};</script><?php else:?><p>Selecciona un carro para generar su QR.</p><?php endif;?></section></main></body></html>
+</style></head><body><main class="wrap"><a class="no-print" href="panel.php">← Volver al panel</a><section class="box"><h1>Generar código QR</h1><form class="no-print"><label for="carro">Carro</label><select id="carro" name="carro" onchange="this.form.submit()"><option value="">Selecciona un carro</option><?php foreach($carros as $c):?><option value="<?=e($c['codigo'])?>" <?=$codigo===$c['codigo']?'selected':''?>><?=e($c['codigo'])?><?= $c['descripcion'] ? ' — '.e($c['descripcion']) : ''?></option><?php endforeach;?></select></form><?php if($target):?><div id="qrcode" class="qr"></div><p class="url"><?=e($target)?></p><div class="no-print"><button type="button" id="download">Descargar PNG</button><button type="button" onclick="window.print()">Imprimir</button></div><script>
+const qr=new QRCode(document.getElementById('qrcode'),{text:<?=json_encode($target,JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT)?>,width:280,height:280,colorDark:'#183044',colorLight:'#ffffff'});
+document.getElementById('download').onclick=()=>{
+  const canvas=document.querySelector('#qrcode canvas');
+  const img=document.querySelector('#qrcode img');
+  let dataUrl='';
+  if(canvas){dataUrl=canvas.toDataURL('image/png');}
+  else if(img){dataUrl=img.src;}
+  if(!dataUrl)return;
+  const a=document.createElement('a');
+  a.href=dataUrl;
+  a.download='qr-<?=e($codigo)?>.png';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+};
+</script><?php else:?><p>Selecciona un carro para generar su QR.</p><?php endif;?></section></main></body></html>
