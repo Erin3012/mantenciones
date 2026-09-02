@@ -16,6 +16,12 @@ if (current_user()) {
 }
 $error = '';
 $return = (string) ($_GET['return'] ?? $_POST['return'] ?? 'panel.php');
+$legacyPath = (string) (parse_url($return, PHP_URL_PATH) ?? '');
+$legacyQuery = [];
+parse_str((string) (parse_url($return, PHP_URL_QUERY) ?? ''), $legacyQuery);
+if (in_array(ltrim($legacyPath, '/'), ['historial.php'], true) && preg_match('/^[A-Za-z0-9_-]{1,80}$/', (string)($legacyQuery['carro'] ?? ''))) {
+    redirect('ver.php?carro=' . rawurlencode((string)$legacyQuery['carro']));
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = strtolower(trim((string) ($_POST['correo'] ?? '')));
     $password = (string) ($_POST['password'] ?? '');
