@@ -7,6 +7,11 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+ob_start(static function (string $output): string {
+    $portal = '<a class="nav-item" href="https://portal.metalrubber.cl" title="Volver al Portal Metalrubber"><span aria-hidden="true">⌂</span><span>Portal Metalrubber</span></a>';
+    return str_replace('<a class="nav-item active" href="panel.php">', $portal . '<a class="nav-item active" href="panel.php">', $output);
+});
+
 function current_user(): ?array {
     static $loaded = false, $user = null;
     if ($loaded) return $user;
